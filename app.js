@@ -1,4 +1,5 @@
 //jshint esversion:6
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const ejs = require('ejs');
@@ -9,6 +10,9 @@ app.use(express.static("public"));
 app.set('view engine','ejs');
 app.use(bodyParser.urlencoded({extended:true}));
 
+
+// console.log(process.env.SECRET);
+
 mongoose.connect("mongodb://localhost:27017/userDB",{useNewUrlParser:true, useCreateIndex: true, 
 useUnifiedTopology: true},()=>console.log("connected to db"));
 
@@ -17,9 +21,9 @@ const userSchema = new mongoose.Schema ({
     password: String
 });
 
-const secret = "thisisvivekvishal";
+// const secret = "thisisvivekvishal";
 
-userSchema.plugin(encrypt,{ secret: secret , encryptedFields: ["password"] });
+userSchema.plugin(encrypt,{ secret: process.env.SECRET , encryptedFields: ["password"] });
 
 const User = new mongoose.model("user",userSchema);
 
@@ -68,6 +72,7 @@ app.post("/login",(req,res)=>{
                     res.render("secrets");
                     console.log(foundUser);
                  }
+                 else console.log("wrong password\n authentication failed");
             }
         }
     })
