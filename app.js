@@ -88,7 +88,7 @@ passport.use(new FacebookStrategy({
     enableProof: true
   },
   function(accessToken, refreshToken, profile, cb) {
-      // console.log(profile);
+     console.log(profile);
     User.findOrCreate({ facebookId: profile.id }, function (err, user) {
       return cb(err, user);
     });
@@ -143,19 +143,23 @@ app.get("/register",function(req,res)
 
 app.get("/secrets",function(req,res)
 {
-    if(req.isAuthenticated())
-    {
-        res.render("secrets");
+  User.find({"secret": {$ne: null}}, function(err, foundUsers){
+    if (err){
+      console.log(err);
+    } else {
+      if (foundUsers) {
+        res.render("secrets", {usersWithSecrets: foundUsers});
+      }
     }
-    else
-    {
-        res.redirect("/login");
-    }
+  });
 });
 
 app.get("/submit",function(req,res)
 {
+  if(req.isAuthenticated())
     res.render('submit');
+    else
+    res.render('login');
 });
 
 app.get("/logout",function(req,res)
