@@ -32,7 +32,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect("mongodb://localhost:27017/userDB",{useNewUrlParser:true, useCreateIndex: true, 
+mongoose.connect("mongodb+srv://max-keviv:Vivek2000@cluster0.2tgxk.mongodb.net/userDB",{useNewUrlParser:true, useCreateIndex: true, 
 useUnifiedTopology: true},()=>console.log("connected to db"));
 mongoose.set("useCreateIndex",true);
 
